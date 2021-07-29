@@ -4,12 +4,9 @@ This code package is used to assess the impact of plum rain on the carbon emissi
 
 First, we need to install the Matlab software on a server and install the Yalmip optimization solution tool and the Gurobi or Cplex solver. After configuring the above software, the specific solution process is as follows:
 
-First, based on the file named "Carbon_CapacityES_Cost_calculation.m", the carbon emissions and corresponding optimization results of the provincial power system, whether considering plum rain’s impact or not, are calculated.
-In this process, we can in sequence choose a year, a change trend fluctuation, a province, and finally, an option whether considering plum rain’s impact or not.
+Based on the file named "Carbon_CapacityES_Cost_calculation.m", the carbon emissions and corresponding optimization results of the provincial power system, whether considering plum rain’s impact or not, are calculated. In this process, we can in sequence choose a year, a change trend fluctuation, a province, and finally, an option whether considering plum rain’s impact or not. The optimized results include the cost objective, carbon emissions, electric storage capacity, coal power output, gas power output, and hourly power balances during the plum rain period.
 
-The optimized results include the cost objective, carbon emissions, electric storage capacity, coal power output, gas power output, and hourly power balances during the plum rain period.
-
-Then, four pathways to offset the plum rain’s incremental carbon emissions under the base case are given. Here we choose the year 2040, the change trend fluctuation of 0, and regardless of the impact of the plum rain. 
+On this basis, four pathways to offset the plum rain’s incremental carbon emissions under the base case are given. Here we choose the year 2040, the change trend fluctuation of 0, and regardless of the impact of the plum rain. 
 
 In the first pathway, based on the file of "C2N.m", the coal power is converted to natural gas power (C2N) to offset the plum rain’s incremental carbon emissions. Enter a province number when performing "C2N.m" to obtain the levelized cost of CO2 mitigation (LCCM) and hourly power balance from 2 July to 8 July.
 
