@@ -1,4 +1,4 @@
-# CODE_plum_rain
+# CODE_plum_rain_impacts_on_power_system_emissions
 
 This code package is used to assess the impact of plum rain on the carbon emissions of the power system.
 
@@ -8,15 +8,17 @@ Based on the file named "Carbon_CapacityES_Cost_calculation.m", the carbon emiss
 
 On this basis, four pathways to offset the plum rain’s incremental carbon emissions under the base case are given. Here we choose the year 2040, the change trend fluctuation of 0, and regardless of the impact of the plum rain. 
 
-In the first pathway, based on the file of "C2N.m", the coal power is converted to natural gas power (C2N) to offset the plum rain’s incremental carbon emissions. Enter a province number when performing "C2N.m" to obtain the levelized cost of CO2 mitigation (LCCM) and hourly power balance from 2 July to 8 July.
+(1) In the C2N pathway, based on the file of "C2N.m", the coal power is converted to natural gas power (C2N) to offset the plum rain’s incremental carbon emissions. Enter a province number when performing "C2N.m" to obtain the levelized cost of CO2 mitigation (LCCM) and hourly power balance from 2 July to 8 July.
 
-In the C2N+DR pathway, based on the program "C2N_DR.m", C2N+DR is used to offset the plum rain’s incremental carbon emissions. Enter a province number when performing " C2N_DR.m " to obtain the levelized cost of CO2 mitigation (LCCM) and hourly power balances under different DR compensation costs and DR powers.
+(2) In the C2N+DR pathway, based on the program "C2N_DR.m", C2N+DR is used to offset the plum rain’s incremental carbon emissions. Enter a province number when performing " C2N_DR.m " to obtain the levelized cost of CO2 mitigation (LCCM) and hourly power balances under different DR compensation costs and DR powers.
 
-In the C2N+CCUS pathway, based on the program "C2N_CCUS.m", C2N+CCUS is used to offset the plum rain’s incremental carbon emissions. Enter a province number when performing " C2N_CCUS.m " to obtain the levelized cost of CO2 mitigation (LCCM), compensating energy and hourly power balances under different CCUS costs and CCUS efficiencies.
+(3) In the C2N+CCUS pathway, based on the program "C2N_CCUS.m", C2N+CCUS is used to offset the plum rain’s incremental carbon emissions. Enter a province number when performing " C2N_CCUS.m " to obtain the levelized cost of CO2 mitigation (LCCM), compensating energy and hourly power balances under different CCUS costs and CCUS efficiencies.
 
-In the C2N+LD pathway, based on the program "C2N_LD.m", C2N+LD is used to offset the plum rain’s incremental carbon emissions. Enter a province number when performing "C2N_LD.m " to obtain the levelized cost of CO2 mitigation (LCCM), net released energy and hourly power balances under different LD power and energy capacity costs.
+(4) In the C2N+LD pathway, based on the program "C2N_LD.m", C2N+LD is used to offset the plum rain’s incremental carbon emissions. Enter a province number when performing "C2N_LD.m " to obtain the levelized cost of CO2 mitigation (LCCM), net released energy and hourly power balances under different LD power and energy capacity costs.
 
 It should be noted that the default solution gap of Gorubi and Cplex is 1e-4. Therefore, the optimization results with different gaps will be slightly different, but it will not affect the substantive results of this article.
+
+Each province corresponds to an Excel dataset, specifically including hourly PV output (including affected and unaffected PV), wind power output and electricity load. Also, the number of clustered thermal power units, the power capacity of photovoltaic (PV), wind power (WT), other renewable energy (RG) and tie-line (GL)  in each province are given.
 
 Note:
 Set of years: 2020, 2030, 2040, 2050
