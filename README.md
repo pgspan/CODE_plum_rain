@@ -2,7 +2,7 @@
 
 This code package is used to assess the impact of plum rain on the carbon emissions of the power system.
 
-First, we need to install the Matlab software on a server and install the Yalmip optimization solution tool and the Gurobi or Cplex solver. After configuring the above software, the specific solution process is as follows:
+Before we begin, we need to install the Matlab software on a server and install the [Yalmip](https://yalmip.github.io/) optimization solution tool and the [Gurobi](https://www.gurobi.com/) or [Cplex](https://www.ibm.com/analytics/cplex-optimizer) solver. After configuring the above software, the specific solution process is as follows:
 
 Based on the file named "Carbon_CapacityES_Cost_calculation.m", the carbon emissions and corresponding optimization results of the provincial power system, whether considering plum rain’s impact or not, are calculated. In this process, we can in sequence choose a year, a change trend fluctuation, a province, and finally, an option whether considering plum rain’s impact or not. The optimized results include the cost objective, carbon emissions, electric storage capacity, coal power output, gas power output, and hourly power balances during the plum rain period.
 
