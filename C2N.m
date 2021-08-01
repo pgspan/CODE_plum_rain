@@ -123,26 +123,26 @@ Cons=Cons+(0<=curtailment_PV2(:,1));%
 %% Constraints of carbon emissions
 switch province_index
     case 1
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-68759703.07==0);
-    Capacity_ES=123088.9045;%%%%%%jiangsu
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-68752534.16==0);
+    Capacity_ES=123352.5742;%%%%%%jiangsu
     case 2
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-28554255.8==0);
-    Capacity_ES=188027.6391;%%%%anhui
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-28547033.04==0);
+    Capacity_ES=188029.9974;%%%%anhui
     case 3
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-40558446.45==0);
-    Capacity_ES=118080.6491;%%%%zhejiang
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-40561530.67==0);
+    Capacity_ES=117625.0953;%%%%zhejiang
     case 4 
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-9878620.853==0);
-    Capacity_ES=114163.5413;%%%%jiangxi
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-9879448.098==0);
+    Capacity_ES=114279.2732;%%%%jiangxi
     case 5 
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-28354080.21==0);
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-28352257.05==0);
     Capacity_ES=129941.246;%%%%hubei
     case 6 
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-17153420.95==0);
-    Capacity_ES=8162.235;%%%%shanghai
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-17161045.1==0);
+    Capacity_ES=7952.390274;%%%%shanghai
     case 7 
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-10046393.08==0);
-    Capacity_ES=44997.6273;%%%%hunan
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))+unit_carbon_gas*sum(sum(P_NG))-10046598.36==0);
+    Capacity_ES=44203.74918;%%%%hunan
 end
 
 %% Constraints of CG and NG
@@ -268,7 +268,7 @@ end
 obj=obj+100*sum(curtailment_PV1)+100*sum(curtailment_PV2)+T/8760*(discount_rate*(1+discount_rate)^lifetime)/((1+discount_rate)^lifetime-1)*unit_bt*Capacity_ES+100*sum(curtailment_load);
  
 
-    ops=sdpsettings('solver','cplex','verbose',0);
+    ops=sdpsettings('solver','gurobi','verbose',0);
     sol=optimize(Cons,obj,ops);
     if sol.problem == 0
         fprintf('%s%.4f\n','Objective: ',value(obj));
@@ -283,33 +283,30 @@ SOC_ES=value(SOC_ES);P_ES_cha=value(P_ES_cha);P_ES_dis=value(P_ES_dis);curtailme
 P_PV1=value(P_PV1);P_PV2=value(P_PV2);
 
 %% Hourly power balance of 2 July to 7 July
-Hourly_powerbalance=zeros(168,7);
+Hourly_powerbalance=zeros(168,4);
 for t=337:504
-    Hourly_powerbalance(t-336,1)=value(P_RG+unit_WT_output(t,1)*C_WT+P_TL);
-    Hourly_powerbalance(t-336,2)=value(P_PV1(t,1)+P_PV2(t,1));
-    Hourly_powerbalance(t-336,3)=value(sum(P_CG(t,:)));
-    Hourly_powerbalance(t-336,4)=value(sum(P_NG(t,:)));
-    Hourly_powerbalance(t-336,5)=value(P_ES_dis(t,1));
-    Hourly_powerbalance(t-336,6)=value(P_ES_cha(t,1));
-    Hourly_powerbalance(t-336,7)=value(electric_load(t,1));
+    Hourly_powerbalance(t-336,1)=value(P_RG+unit_WT_output(t,1)*C_WT+P_TL+P_PV1(t,1)+P_PV2(t,1)+P_ES_dis(t,1)-P_ES_cha(t,1));
+    Hourly_powerbalance(t-336,2)=value(sum(P_CG(t,:)));
+    Hourly_powerbalance(t-336,3)=value(sum(P_NG(t,:)));
+    Hourly_powerbalance(t-336,4)=value(electric_load(t,1));
 end
 
 %% LCCM
 switch province_index
     case 1
-    LCCM=(obj-23870083.3461)/(1578460.635);
+    LCCM=(obj-23870072.4679)/(1585553.133);
     case 2
-    LCCM=(obj-11525872.0087)/(1352036.357);
+    LCCM=(obj-11525437.66)/(1355171.973);
     case 3
-    LCCM=(obj-16123011.9360)/(1312758.533);
+    LCCM=(obj-16122537.16)/(1297373.727);
     case 4 
-    LCCM=(obj-4682750.5571)/(462567.6893);
+    LCCM=(obj-4682786.986)/(463605.4906);
     case 5 
-    LCCM=(obj-10867005.0253)/(248156.8846);
+    LCCM=(obj-10866334.37)/(249997.2544);
     case 6 
-    LCCM=(obj-7285479.2442)/(164507.3758);
+    LCCM=(obj-7285361.37)/(153135.4533);
     case 7 
-    LCCM=(obj-3636015.4696)/(58869.14306);
+    LCCM=(obj-3643553.474)/(58429.69657);
 end
 
 

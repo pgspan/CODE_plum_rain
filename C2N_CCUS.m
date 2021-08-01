@@ -133,34 +133,35 @@ Cons=Cons+(0<=ccus);
 %% Constraints of carbon emissions
 switch province_index
     case 1
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-68759703.07==0);
-    Capacity_ES=123088.9045;%%%%%%jiangsu
-    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=1538143.838);
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-68752534.16==0);
+    Capacity_ES=123352.5742;%%%%%%jiangsu
+    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=1538131.714);
     case 2
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-28554255.8==0);
-    Capacity_ES=188027.6391;%%%%anhui
-    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=1161538.88);
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-28547033.04==0);
+    Capacity_ES=188029.9974;%%%%anhui
+    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=1161546.446);
     case 3
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-40558446.45==0);
-    Capacity_ES=118080.6491;%%%%zhejiang
-    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=888382.4595+587158.4608);
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-40561530.67==0);
+    Capacity_ES=117625.0953;%%%%zhejiang
+    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=1539092.293);
     case 4 
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-9878620.853==0);
-    Capacity_ES=114163.5413;%%%%jiangxi
-    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=383167.9298);
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-9879448.098==0);
+    Capacity_ES=114279.2732;%%%%jiangxi
+    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=383158.3738);
     case 5 
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-28354080.21==0);
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-28352257.05==0);
     Capacity_ES=129941.246;%%%%hubei
-    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=248289.8504);
+    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=248276.0549);
     case 6 
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-17153420.95==0);
-    Capacity_ES=8162.235;%%%%shanghai
-    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=211315.1187);
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-17161045.1==0);
+    Capacity_ES=7952.390274;%%%%shanghai
+    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=211313.4108);
     case 7 
-    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-10046393.08==0);
-    Capacity_ES=44997.6273;%%%%hunan
-    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=52422.52662);
+    Cons=Cons+(unit_carbon_coal*sum(sum(P_CG))-effi_ccus(1,n)*unit_carbon_coal*ccus*T+unit_carbon_gas*sum(sum(P_NG))-10046598.36==0);
+    Capacity_ES=44203.74918;%%%%hunan
+    Cons=Cons+((effi_ccus(1,n)-0.3)*ccus*T<=52421.73475);
 end
+
 
 %% Constraints of CG and NG
 for i=1:num_CG
@@ -285,10 +286,10 @@ end
 obj=obj+100*sum(curtailment_PV1)+100*sum(curtailment_PV2)+T/8760*(discount_rate*(1+discount_rate)^lifetime)/((1+discount_rate)^lifetime-1)*unit_bt*Capacity_ES+100*sum(curtailment_load);
 obj=obj+cost_ccus(m,1)*ccus*T;%
 
-    ops=sdpsettings('solver','cplex','verbose',0);
+    ops=sdpsettings('solver','gurobi','verbose',0);
     sol=optimize(Cons,obj,ops);
     if sol.problem == 0
-        disp('Output optimization results')
+%         disp('Output optimization results')
         fprintf('%s%.4f\n','Objective: ',value(obj));
     else
         display('Hmm, something went wrong!');
@@ -301,33 +302,31 @@ SOC_ES=value(SOC_ES);P_ES_cha=value(P_ES_cha);P_ES_dis=value(P_ES_dis);curtailme
 P_PV1=value(P_PV1);P_PV2=value(P_PV2);
 
 %% Hourly power balance of 2 July to 7 July
-Hourly_powerbalance=zeros(168,7);
+Hourly_powerbalance=zeros(168,5);
 for t=337:504
-    Hourly_powerbalance(t-336,1)=value(P_RG+unit_WT_output(t,1)*C_WT+P_TL);
-    Hourly_powerbalance(t-336,2)=value(P_PV1(t,1)+P_PV2(t,1));
-    Hourly_powerbalance(t-336,3)=value(sum(P_CG(t,:)));
-    Hourly_powerbalance(t-336,4)=value(sum(P_NG(t,:)));
-    Hourly_powerbalance(t-336,5)=value(P_ES_dis(t,1));
-    Hourly_powerbalance(t-336,6)=value(P_ES_cha(t,1));
-    Hourly_powerbalance(t-336,7)=value(electric_load(t,1));
+    Hourly_powerbalance(t-336,1)=value(P_RG+unit_WT_output(t,1)*C_WT+P_TL+P_PV1(t,1)+P_PV2(t,1)+P_ES_dis(t,1)-P_ES_cha(t,1));
+    Hourly_powerbalance(t-336,2)=value(sum(P_CG(t,:)));
+    Hourly_powerbalance(t-336,3)=value(sum(P_NG(t,:)));
+    Hourly_powerbalance(t-336,4)=value((effi_ccus(1,n)-0.3)*ccus);
+    Hourly_powerbalance(t-336,5)=value(electric_load(t,1));
 end
 
 %% LCCM and clean_energy
 switch province_index
     case 1
-    LCCM(m,n)=(obj-23870083.3461)/(1578460.635);
+    LCCM(m,n)=(obj-23870072.4679)/(1585553.133);
     case 2
-    LCCM(m,n)=(obj-11525872.0087)/(1352036.357);
+    LCCM(m,n)=(obj-11525437.66)/(1355171.973);
     case 3
-    LCCM(m,n)=(obj-16123011.9360)/(1312758.533);
+    LCCM(m,n)=(obj-16122537.16)/(1297373.727);
     case 4 
-    LCCM(m,n)=(obj-4682750.5571)/(462567.6893);
+    LCCM(m,n)=(obj-4682786.986)/(463605.4906);
     case 5 
-    LCCM(m,n)=(obj-10867005.0253)/(248156.8846);
+    LCCM(m,n)=(obj-10866334.37)/(249997.2544);
     case 6 
-    LCCM(m,n)=(obj-7285479.2442)/(164507.3758);
+    LCCM(m,n)=(obj-7285361.37)/(153135.4533);
     case 7 
-    LCCM(m,n)=(obj-3636015.4696)/(58869.14306);
+    LCCM(m,n)=(obj-3643553.474)/(58429.69657);
 end
 clean_energy(m,n)=sum((effi_ccus(1,n)-0.3)*ccus*T);
 

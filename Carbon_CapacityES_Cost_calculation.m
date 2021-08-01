@@ -46,31 +46,31 @@ switch province_index
     case 1
         disp('jiangsu')
         AAS=0.8;
-        degree0=[-0.01373 0.10455 0.1007 0.12797 0.081];
+        degree0=[-0.01392 0.09465 0.09149 0.11345 0.07493];
     case 2
         disp('anhui')
         AAS=0.77;
-        degree0=[0.02084 0.105 0.09707 0.09551 0.06352];
+        degree0=[0.02042 0.09502 0.08848 0.08718 0.05973];
     case 3
         disp('zhejiang')
         AAS=0.7;
-        degree0=[0.1472 0.19771 0.13489 0.07286 0.02866];
+        degree0=[0.12831 0.16508 0.11886 0.06791 0.02786];
     case 4
         disp('jiangxi')
         AAS=0.45;
-        degree0=[0.09855 0.14787 0.08419 0.06532 0.03211];
+        degree0=[0.08971 0.12882 0.07765 0.06131 0.03111];
     case 5
         disp('hubei')
         AAS=0.53;
-        degree0=[0.01408 0.05275 0.05873 0.03718 0.06364];
+        degree0=[0.01388 0.0501 0.05547 0.03584 0.05984];
     case 6
         disp('shanghai')
         AAS=1;
-        degree0=[0.07587 0.24102 0.15454 0.10293 0.01822];
+        degree0=[0.07052 0.19421 0.13386 0.09332 0.01789];
     case 7
         disp('hunan')
         AAS=0.18;
-        degree0=[0.04622 0.08116 0.05018 0.03132 0.05723];
+        degree0=[0.04418 0.07507 0.04778 0.030365 0.05413];
     otherwise
         disp('Wrong Input')
         return
@@ -156,7 +156,7 @@ RS_U=1000;
 Cons=[];
 %% Constraints of PV output
 for w=1:5
-Cons=Cons+(P_PV1((w-1)*168+1:w*168,1)+curtailment_PV1((w-1)*168+1:w*168,1)==unit_PV_output1((w-1)*168+1:w*168,1)*(1+degree(1,w))*(1+aerosol)*C_PV*AAS);
+Cons=Cons+(P_PV1((w-1)*168+1:w*168,1)+curtailment_PV1((w-1)*168+1:w*168,1)==unit_PV_output1((w-1)*168+1:w*168,1)/(1-degree(1,w))*(1+aerosol)*C_PV*AAS);
 end
 Cons=Cons+(P_PV2(:,1)+curtailment_PV2(:,1)==unit_PV_output2(:,1)*(1+aerosol)*C_PV*(1-AAS));
 Cons=Cons+(0<=P_PV1(:,1));
@@ -287,7 +287,7 @@ end
 obj=obj+100*sum(curtailment_PV1)+100*sum(curtailment_PV2)+T/8760*(discount_rate*(1+discount_rate)^lifetime)/((1+discount_rate)^lifetime-1)*unit_bt*Capacity_ES+100*sum(curtailment_load);
  
 %% Solve
-    ops=sdpsettings('solver','cplex','verbose',0);
+    ops=sdpsettings('solver','gurobi','verbose',0);
     sol=optimize(Cons,obj,ops);
     if sol.problem == 0
         disp('Output optimization results')
@@ -296,6 +296,7 @@ obj=obj+100*sum(curtailment_PV1)+100*sum(curtailment_PV2)+T/8760*(discount_rate*
         fprintf('%s%.4f\n','ES_capacity: ',value(Capacity_ES));
         fprintf('%s%.4f\n','CG_output: ',value(sum(sum(P_CG))));
         fprintf('%s%.4f\n','NG_output: ',value(sum(sum(P_NG))));
+        fprintf('%s%.4f\n','PV1_output: ',value(sum(sum(P_PV1))));
     else
         display('Hmm, something went wrong!');
         sol.info
@@ -306,6 +307,14 @@ P_CG=value(P_CG);U_CG=value(U_CG);Y_CG=value(Y_CG);Z_CG=value(Z_CG);
 P_NG=value(P_NG);U_NG=value(U_NG);Y_NG=value(Y_NG);Z_NG=value(Z_NG);
 SOC_ES=value(SOC_ES);P_ES_cha=value(P_ES_cha);P_ES_dis=value(P_ES_dis);curtailment_load=value(curtailment_load);
 P_PV1=value(P_PV1);P_PV2=value(P_PV2);
+
+Hourly_powerbalance=zeros(168,4);
+for t=337:504
+    Hourly_powerbalance(t-336,1)=value(P_RG+unit_WT_output(t,1)*C_WT+P_TL+P_PV1(t,1)+P_PV2(t,1)+P_ES_dis(t,1)-P_ES_cha(t,1));
+    Hourly_powerbalance(t-336,2)=value(sum(P_CG(t,:)));
+    Hourly_powerbalance(t-336,3)=value(sum(P_NG(t,:)));
+    Hourly_powerbalance(t-336,4)=value(electric_load(t,1));
+end
 
 
 
